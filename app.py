@@ -70,6 +70,7 @@ st.markdown("**Real-Time Degradation Benchmark:** Baseline Model (Clean-only) vs
 st.sidebar.header("🕹️ Input Source Mode")
 input_mode = st.sidebar.radio("Select Input Mode:", [
     "🔥 Harsh Unseen Test Cases (Realistic Degraded Scenarios)",
+    "📷 Live Laptop Webcam",
     "📸 Upload Image",
     "🎥 Upload Video Stream",
     "📁 Clean Benchmark Signs"
@@ -88,6 +89,13 @@ if input_mode == "🔥 Harsh Unseen Test Cases (Realistic Degraded Scenarios)":
         raw_bgr = cv2.imread(img_p)
         current_frame = cv2.cvtColor(raw_bgr, cv2.COLOR_BGR2RGB)
         target_label = idx_to_name[sorted_codes.index(chosen_item['code'])]
+
+elif input_mode == "📷 Live Laptop Webcam":
+    st.sidebar.info("Show a road sign to your webcam (from your phone screen or paper) to classify live!")
+    cam_picture = st.sidebar.camera_input("Take a photo with Webcam")
+    if cam_picture is not None:
+        file_bytes = np.asarray(bytearray(cam_picture.read()), dtype=np.uint8)
+        current_frame = cv2.cvtColor(cv2.imdecode(file_bytes, 1), cv2.COLOR_BGR2RGB)
 
 elif input_mode == "📸 Upload Image":
     up_file = st.sidebar.file_uploader("Upload road sign photo", type=["png", "jpg", "jpeg"])
@@ -243,4 +251,4 @@ if current_frame is not None:
                 st.progress(float(pred2[i]), text=f"{idx_to_name[i]}: {pred2[i]*100:.1f}%")
 
 else:
-    st.info("👈 Select an input mode in the sidebar: Harsh Unseen Tests, Upload Image, or Video!")
+    st.info("👈 Select an input mode in the sidebar: Harsh Unseen Tests, Live Webcam, Upload Image, or Video!")
