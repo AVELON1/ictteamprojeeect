@@ -1,16 +1,17 @@
-# Virtual environments
+# Virtual environment
 .venv/
 venv/
+ENV/
 env/
 __pycache__/
-*.pyc
-
-# Dataset zip and large raw image folders
-data_base.zip
-dataset/
-*.zip
-
-# System files
+*.py[cod]
+*$py.class
 .DS_Store
+
+# Large raw datasets (can be unpacked from data_base.zip)
+dataset/train_clean/
+dataset/test_clean/
+
+# IDE
 .idea/
 .vscode/
