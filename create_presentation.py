@@ -381,8 +381,8 @@ def build_deck():
         bp.font.size = Pt(12)
         bp.font.color.rgb = C_TEXT_MAIN
         
-    # Right: Streamlit Screenshot
-    shot_p = 'assets/streamlit_comparison.jpg'
+    # Right: English Streamlit Screenshot / Telemetry Card
+    shot_p = 'assets/streamlit_en_clean.png'
     if os.path.exists(shot_p):
         s6.shapes.add_picture(shot_p, Inches(6.8), Inches(1.8), Inches(5.8), Inches(4.8))
 
