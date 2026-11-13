@@ -1,0 +1,26 @@
+{
+  "code_to_idx": {
+    "1.22": 0,
+    "2.1": 1,
+    "2.4": 2,
+    "2.5": 3,
+    "3.1": 4,
+    "3.20": 5,
+    "3.27": 6,
+    "4.1.1": 7,
+    "5.5": 8,
+    "6.4": 9
+  },
+  "idx_to_name": {
+    "0": "1.22 (Pedestrian crossing)",
+    "1": "2.1 (Priority road)",
+    "2": "2.4 (Give way)",
+    "3": "2.5 (Stop)",
+    "4": "3.1 (No entry)",
+    "5": "3.20 (No overtaking)",
+    "6": "3.27 (No stopping)",
+    "7": "4.1.1 (Go straight)",
+    "8": "5.5 (One-way road)",
+    "9": "6.4 (Parking)"
+  }
+}
