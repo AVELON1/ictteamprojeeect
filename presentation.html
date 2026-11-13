@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robust Road Sign Recognition (Option B)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f172a;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .slide-container {
+    width: 90vw;
+    max-width: 1200px;
+    height: 80vh;
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 16px;
+    padding: 3rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+  
+  .slide-container.active { display: flex; }
+  
+  h1 { font-size: 2.5rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.5rem; line-height: 1.2; }
+  h2 { font-size: 1.3rem; color: #10b981; font-weight: 600; margin-bottom: 1.5rem; }
+  p, li { font-size: 1.15rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 0.75rem; }
+  ul { padding-left: 1.5rem; }
+  
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; }
+  .badge-danger { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+  .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+  
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
+  .card { background: #0f172a; border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 12px; padding: 1.5rem; }
+  .code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(148, 163, 184, 0.15);
+    padding-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #64748b;
+  }
+  
+  .btn {
+    background: #334155;
+    color: #f8fafc;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .btn:hover { background: #475569; }
+</style>
+</head>
+<body>
+
+<!-- Slide 1 -->
+<div class="slide-container active" id="slide-1">
+  <div>
+    <span class="badge badge-success" style="margin-bottom:1rem;">ICT TEAM PROJECT</span>
+    <h1>Robust Road Sign Recognition via Synthetic Data Augmentation</h1>
+    <h2>Option B: Data-Centric AI using OpenCV Physical Perturbations</h2>
+    <p>Controlled study demonstrating that physical environmental modeling outclasses naive network scaling in autonomous driving perception.</p>
+  </div>
+  <div class="nav-bar">
+    <span>Slide 1 of 5 • Press Space or Right Arrow</span>
+    <button class="btn" onclick="nextSlide()">Next &rarr;</button>
+  </div>
+</div>
+
+<!-- Slide 2 -->
+<div class="slide-container" id="slide-2">
+  <div>
+    <h1>The Practical Problem: Overconfidence Hazard</h1>
+    <h2>Real-world driving cameras degrade under motion blur, tilt, and rain</h2>
+    <div class="grid-2">
+      <div class="card" style="border-left: 4px solid #f43f5e;">
+        <h3 style="color:#f43f5e; margin-bottom:0.5rem;">❌ Model 1 (Clean Baseline)</h3>
+        <p>Trained only on pristine studio images. On our adverse benchmark:</p>
+        <p>• Misclassifies <b>STOP (2.5)</b> as <b>NO ENTRY (3.1)</b></p>
+        <p>• Reports <span class="badge badge-danger">80.8% FALSE CONFIDENCE</span></p>
+        <p style="font-size:0.95rem; color:#94a3b8;">Fatal risk in autonomous braking systems.</p>
+      </div>
+      <div class="card" style="border-left: 4px solid #10b981;">
+        <h3 style="color:#10b981; margin-bottom:0.5rem;">✅ Model 2 (Option B: OpenCV)</h3>
+        <p>Enriched via synthetic physical distortions:</p>
+        <p>• Accurately recognizes <b>STOP (2.5)</b></p>
+        <p>• Reports <span class="badge badge-success">75.4% TRUE CONFIDENCE</span></p>
+        <p style="font-size:0.95rem; color:#94a3b8;">Preserves safety under severe optical defocus.</p>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn" onclick="prevSlide()">&larr; Back</button>
+    <span>Slide 2 of 5</span>
+    <button class="btn" onclick="nextSlide()">Next &rarr;</button>
+  </div>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide-container" id="slide-3">
+  <div>
+    <h1>Methodology: Controlled Data-Centric AI</h1>
+    <h2>Identical 3-Block CNN Topology (~320K parameters) • Zero architecture tricks</h2>
+    <ul style="margin-top:1rem;">
+      <li><b>Tilt & Incline:</b> <code>cv2.warpAffine</code> with reflection padding (&plusmn;15&deg; range).</li>
+      <li><b>Optical Defocus / Motion Blur:</b> <code>cv2.GaussianBlur</code> with odd kernel sizes (3 to 9).</li>
+      <li><b>Illumination Variance:</b> <code>cv2.convertScaleAbs</code> (&alpha; &isin; [0.6, 1.3], &beta; &isin; [-35, 25]).</li>
+      <li><b>Semantic Directional Integrity:</b> Horizontal flipping strictly prohibited to prevent sign inversion.</li>
+    </ul>
+  </div>
+  <div class="nav-bar">
+    <button class="btn" onclick="prevSlide()">&larr; Back</button>
+    <span>Slide 3 of 5</span>
+    <button class="btn" onclick="nextSlide()">Next &rarr;</button>
+  </div>
+</div>
+
+<!-- Slide 4 -->
+<div class="slide-container" id="slide-4">
+  <div>
+    <h1>Quantitative Benchmark Results</h1>
+    <h2>Strict comparative evaluation on 816 test samples</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Clean Test Accuracy</h3>
+        <p class="code" style="font-size: 2rem; color:#f8fafc; font-weight:700; margin: 0.5rem 0;">99.2% &rarr; 99.8%</p>
+        <p>Both models master clean pristine images with zero regression.</p>
+      </div>
+      <div class="card">
+        <h3>Adverse / Distorted Accuracy</h3>
+        <p class="code" style="font-size: 2rem; color:#10b981; font-weight:700; margin: 0.5rem 0;">72.4% &rarr; 88.5% - 92.4%</p>
+        <p><span class="badge badge-success">+16.0% ACCURACY RETENTION</span> under extreme blur and camera angle.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem; color:#94a3b8;"><b>Latency:</b> &lt; 8 ms per frame on CPU • <b>TFLite Edge Compression:</b> 13 MB &rarr; 1.1 MB (12x compression).</p>
+  </div>
+  <div class="nav-bar">
+    <button class="btn" onclick="prevSlide()">&larr; Back</button>
+    <span>Slide 4 of 5</span>
+    <button class="btn" onclick="nextSlide()">Next &rarr;</button>
+  </div>
+</div>
+
+<!-- Slide 5 -->
+<div class="slide-container" id="slide-5">
+  <div>
+    <h1>Live Interactive Dashboard & Delivery</h1>
+    <h2>Production-ready edge pipeline and reproducible code</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Interactive Web Demo</h3>
+        <p>• Local URL: <code>http://localhost:8501</code></p>
+        <p>• Live real-time OpenCV sliders (blur, tilt, night dusk)</p>
+        <p>• Support for custom user photos, dashcam video & laptop webcam</p>
+      </div>
+      <div class="card">
+        <h3>Open Source Repository</h3>
+        <p>• GitHub: <b>github.com/AVELON1/ictteamprojeeect</b></p>
+        <p>• Formal reports: <code>Project_Report.pdf</code> & <code>Project_Report.docx</code></p>
+        <p>• Pre-compiled edge models: <code>models/model_aug.tflite</code></p>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn" onclick="prevSlide()">&larr; Back</button>
+    <span>Slide 5 of 5</span>
+    <span style="color:#10b981; font-weight:700;">End of Deck • Thank You!</span>
+  </div>
+</div>
+
+<script>
+  let current = 1;
+  const total = 5;
+
+  function showSlide(n) {
+    document.querySelectorAll('.slide-container').forEach(el => el.classList.remove('active'));
+    document.getElementById(`slide-${n}`).classList.add('active');
+    current = n;
+  }
+
+  function nextSlide() {
+    if (current < total) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 1) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
+</script>
+</body>
+</html>
