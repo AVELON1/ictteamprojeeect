@@ -14,30 +14,29 @@
   - `5.5`: One-way road (Дорога с односторонним движением)
   - `6.4`: Parking (Парковка)
 - **Comparative Data Models**:
-  - `models/model_clean.keras`: Baseline CNN trained strictly on clean images. Drops sharply under optical blur, rotation, and lighting changes (92.5% -> 64.3%).
-  - `models/model_aug.keras`: Enhanced CNN trained with OpenCV synthetic perturbations (Gaussian blur, warpAffine rotation, contrast/brightness adjustments, sensor noise). Retains high robustness (99.8% -> 84.6%+).
+  - `models/model_clean.keras`: Baseline CNN trained strictly on clean images. Drops sharply under optical blur, rotation, and lighting changes (92.5% -> 64.3% - 75.4%).
+  - `models/model_aug.keras`: Enhanced CNN trained with OpenCV synthetic perturbations (Gaussian blur, warpAffine rotation, contrast/brightness adjustments, sensor noise). Retains high robustness (99.8% -> 91.8%+).
 - **Design Tokens & Aesthetic Architecture**:
-  - Palette: Deep Slate theme (`#090d16` canvas, `#0f172a` container backgrounds, `#1e293b` borders, `#334155` dividers).
-  - Status Accents: Rose (`#f43f5e`) for Model 1 / failures; Emerald (`#10b981`) for Model 2 / robust passes; Amber (`#f59e0b`) for moderate confidence.
+  - Palette: Deep Slate theme (`#080c14` canvas, `#0f172a` container backgrounds, `#1e293b` borders, `#334155` dividers).
+  - Status Accents: Rose (`#f43f5e`) for Model 1 / failures; Emerald (`#10b981`) for Model 2 / robust passes; Amber (`#f59e0b`) for rescued cases; Sky (`#38bdf8`) for delta gain.
   - Typography: `Plus Jakarta Sans` for headers and UI prose; `JetBrains Mono` for tabular metrics and telemetry.
   - Transitions: `<180ms ease-out`, no generic purple/indigo gradients or neon glow.
 
 ## 2. Multi-Phase Execution Checklist
 - [x] **Milestone 1: Direction & Spec**
   - Updated SPEC.md with architecture, design tokens, data schema, and multi-category benchmarking flow.
-- [ ] **Milestone 2: Core Implementation**
-  - Create multi-category evaluation backend logic (`src/batch_eval.py` or within `app.py`).
-  - Preload representative clean and degraded samples for all 10 categories.
-  - Implement batched inference pipeline for both Model 1 and Model 2 with real-time accuracy and confidence calculations.
-  - Test batch evaluation logic via CLI.
-- [ ] **Milestone 3: Visual & Polish**
-  - Design immediate multi-category landing view with simulated/live loading sequence on first visit.
-  - Build executive statistical KPI cards (Accuracy, Error Rate Drop, Average Confidence, Resilience Factor).
-  - Render comparative per-category interactive charts (Altair / Streamlit).
-  - Construct responsive 10-category visual grid showing side-by-side inputs, predictions, and rescue tags.
-  - Provide quick-preset degradation buttons (Weather, Optical Defocus, Tilt, Dusk) and real-time sliders.
-  - Preserve secondary deep-dive modes (Single Sign Inspector, Webcam, Harsh Unseen Tests, Custom Upload) in structured tabs.
-- [ ] **Milestone 4: Quality Gate**
-  - Run the local Streamlit server on port 8501.
-  - Verify auto-loading across all 10 categories upon page entry without manual intervention.
-  - Audit against anti-slop rules (typography, palette, tabular numerals, performance).
+- [x] **Milestone 2: Core Implementation**
+  - Created multi-category evaluation backend logic in `src/eval_suite.py`.
+  - Implemented batched inference pipeline for both Model 1 and Model 2 with real-time accuracy and confidence calculations.
+  - Tested batch evaluation logic via CLI across all 816 test samples.
+- [x] **Milestone 3: Visual & Polish**
+  - Built immediate multi-category landing view with progressive scanning animation on first entry.
+  - Rendered executive statistical KPI cards (Accuracy, Error Rate Drop, Delta Gain, Rescued Categories).
+  - Integrated per-category interactive Altair grouped bar chart.
+  - Constructed responsive 10-category visual comparison grid with side-by-side inputs, predictions, confidence progress, and rescue badges.
+  - Added quick-preset degradation selectors (Weather, Optical Defocus, Night/Dusk, Mild adverse, Clean, Custom).
+  - Preserved secondary tabs (Single Sign Inspector, Harsh Unseen Tests, Webcam/Upload) for full workflow depth.
+- [x] **Milestone 4: Quality Gate**
+  - Verified local Streamlit server running on `http://localhost:8501` (HTTP 200 OK).
+  - Verified with Browser Verifier: auto-loading across all 10 categories, KPI cards, charts, and image comparison cards pass all visual checks.
+  - Audited against anti-slop rules (palette, typography, tabular figures, no filler marketing copy).
